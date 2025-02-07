@@ -5,7 +5,7 @@ import authRouter from './routes/authRouter.js';
 import connection from './database/db.js';
 import userRouter from './routes/userRouter.js';
 import excelRouter  from './routes/excelRouter.js';
-
+import paymentRouter from './routes/payments.routs.js' ; 
 
 connection()
 const PORT = process.env.PORT || 5000
@@ -25,6 +25,7 @@ app.use(cors({
 app.use('/api/auth' , authRouter ) ;
 app.use('/api/user' , userRouter ) ;
 app.use('/api/excel' , excelRouter ) ;
+app.use('/api/payment' , paymentRouter ) ;
 
 
 

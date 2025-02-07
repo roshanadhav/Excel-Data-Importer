@@ -7,6 +7,8 @@ import { ToastContainer } from 'react-toastify';
 import Excel from './pages/Excel';
 import DashbordPage from './pages/DashbordPage';
 import AboutPage from './pages/AboutPage';
+import Subscriptions from './pages/Subscreption';
+import ContactPage from './pages/ContactPage'
 
 
 const App = () => {
@@ -21,6 +23,8 @@ const App = () => {
         <Route path='/about' element={<AboutPage/>}/>
         <Route path='/verify-email' element={<EmailVerify/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
+        <Route path='/subscreption' element={<Subscriptions/>}/>
+        <Route path='/contact' element={<ContactPage/>}/>
       </Routes>
     </div>
   )

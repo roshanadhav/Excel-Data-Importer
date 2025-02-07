@@ -12,36 +12,36 @@ const Navbar = () => {
   const [showProfilePopup, setShowProfilePopup] = useState(false);
 
   const navigate = useNavigate();
-  const { isLoggedIn, userData ,logout } = useContext(AppContext);
+  const { isLoggedIn, userData, logout } = useContext(AppContext);
 
-  const logoutUser = async()=>{
+  const logoutUser = async () => {
     try {
-      const data = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout` , { withCredentials: true }) ;
+      const data = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, { withCredentials: true });
       if (data.success) {
         toast.success(data.message)
-      }else{
+      } else {
         toast.error(data.message)
       }
     } catch (error) {
       toast.error(error.message)
     }
-    logout() ;
+    logout();
   }
 
 
   const verifyEmail = async () => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/send-verify-otp` , { withCredentials: true })
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/send-verify-otp`, { withCredentials: true })
       const data = response.data
       if (data.success) {
-        toast.success(data.message) ;
+        toast.success(data.message);
         navigate('/verify-email');
-      }else{
-        toast.error(data.message + '  login first') ; 
+      } else {
+        toast.error(data.message + '  login first');
         navigate('/login');
       }
     } catch (error) {
-      toast.error(error.message) ; 
+      toast.error(error.message);
     }
   }
 
@@ -110,10 +110,9 @@ const Navbar = () => {
                 <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50">
                   <p className="text-lg font-semibold">{userData.name}</p>
                   <p className="text-sm text-gray-600">{userData.email}</p>
-                  <button onClick={()=>logoutUser()} className="text-sm mt-3 text-gray-800 hover:text-red-500 transition duration-200 cursor-pointer font-medium bg-transparent border-none focus:outline-none">
+                  <button onClick={() => logoutUser()} className="text-sm mt-3 text-gray-800 hover:text-red-500 transition duration-200 cursor-pointer font-medium bg-transparent border-none focus:outline-none">
                     Logout
                   </button>
-
 
                   {userData.isEmailVerified ? (
                     <p className="text-green-600 font-medium mt-2">Verified ✅</p>
@@ -122,8 +121,16 @@ const Navbar = () => {
                       Verify Email
                     </button>
                   )}
+                  <button
+                onClick={() => navigate('/subscreption')}
+                className="w-full py-1 mt-4 text-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg transition-all duration-300 ease-in-out 
+                  hover:from-indigo-600 hover:to-purple-700 hover:shadow-indigo-500/50 hover:scale-105 animate-pulse"
+              >
+                Plans
+              </button>
                 </div>
               )}
+              
             </div>
           ) : (
             <button

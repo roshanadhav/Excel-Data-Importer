@@ -40,9 +40,13 @@ const UserSchem  = new Schema({
     ExcelWorks : [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "ExcelData"
+            ref: "Excel"
         }
-    ]
+    ],
+    sub : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Subscreption"
+    }
     
 })
 
