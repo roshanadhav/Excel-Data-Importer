@@ -116,7 +116,7 @@ export const logout = async (req, res) =>{
         })
         return res.json({success : true , message : 'user logged out successfully'})
      } catch (error) {
-        return res.json({success : fals , message : error.message}) ;
+        return res.json({success : false , message : error.message}) ;
      }
 }
 
@@ -129,7 +129,7 @@ export const sendVerifyOTp = async (req,res)=>{
         const user = await User.findById(userId) ;
 
         if (user.isveriFied) {
-            return res.json({success : 'false' , message : 'Account alredy verified'})
+            return res.json({success : false , message : 'Account alredy verified'})
         }
 
         const otp = String(Math.floor(100000 + Math.random() * 900000))

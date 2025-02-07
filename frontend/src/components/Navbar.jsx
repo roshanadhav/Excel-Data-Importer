@@ -1,16 +1,49 @@
-import { useState , useContext} from "react";
+import { useState, useContext } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { User } from "lucide-react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-const Navbar =()=> {
+const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [showProfilePopup, setShowProfilePopup] = useState(false);
 
-  const navigate = useNavigate() ; 
-  const {isLoggedIn , userData} = useContext(AppContext) ; 
+  const navigate = useNavigate();
+  const { isLoggedIn, userData ,logout } = useContext(AppContext);
+
+  const logoutUser = async()=>{
+    try {
+      const data = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout` , { withCredentials: true }) ;
+      if (data.success) {
+        toast.success(data.message)
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+    logout() ;
+  }
+
+
+  const verifyEmail = async () => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/send-verify-otp` , { withCredentials: true })
+      const data = response.data
+      if (data.success) {
+        toast.success(data.message) ;
+        navigate('/verify-email');
+      }else{
+        toast.error(data.message + '  login first') ; 
+        navigate('/login');
+      }
+    } catch (error) {
+      toast.error(error.message) ; 
+    }
+  }
 
   return (
     <nav className="w-full bg-white shadow-md fixed top-0 z-50 right-0">
@@ -32,7 +65,7 @@ const Navbar =()=> {
           <li className="hover:text-blue-600 transition-all">
             <a href="/about">About</a>
           </li>
-          
+
           {/* Services Dropdown */}
           <li className="relative">
             <button
@@ -63,39 +96,44 @@ const Navbar =()=> {
 
         {/* Login Button */}
         {
-  isLoggedIn ? (
-    <div className="relative">
-      {/* Profile Icon */}
-      <User
-        className="text-gray-800 mt-2 mb-2 cursor-pointer"
-        size={30}
-        onClick={() => setShowProfilePopup(!showProfilePopup)}
-      />
+          isLoggedIn ? (
+            <div className="relative">
+              {/* Profile Icon */}
+              <User
+                className="text-gray-800 mt-2 mb-2 cursor-pointer"
+                size={30}
+                onClick={() => setShowProfilePopup(!showProfilePopup)}
+              />
 
-      {/* Popup */}
-      {showProfilePopup && userData && (
-        <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50">
-          <p className="text-lg font-semibold">{userData.name}</p>
-          <p className="text-sm text-gray-600">{userData.email}</p>
-          {userData.isVerified ? (
-            <p className="text-green-600 font-medium mt-2">Verified ✅</p>
+              {/* Popup */}
+              {showProfilePopup && userData && (
+                <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50">
+                  <p className="text-lg font-semibold">{userData.name}</p>
+                  <p className="text-sm text-gray-600">{userData.email}</p>
+                  <button onClick={()=>logoutUser()} className="text-sm mt-3 text-gray-800 hover:text-red-500 transition duration-200 cursor-pointer font-medium bg-transparent border-none focus:outline-none">
+                    Logout
+                  </button>
+
+
+                  {userData.isEmailVerified ? (
+                    <p className="text-green-600 font-medium mt-2">Verified ✅</p>
+                  ) : (
+                    <button onClick={() => verifyEmail()} className="mt-2 ml-5 text-blue-600 font-medium hover:underline">
+                      Verify Email
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           ) : (
-            <button className="mt-2 text-blue-600 font-medium hover:underline">
-              Verify Email
+            <button
+              onClick={() => navigate('/login')}
+              className="mt-3 mb-3  ml-30 border border-gray-500 rounded-full px-10 py-1 text-gray-800 hover:bg-gray-100 transition-all"
+            >
+              Login
             </button>
-          )}
-        </div>
-      )}
-    </div>
-  ) : (
-    <button
-      onClick={() => navigate('/login')}
-      className="mt-3 mb-3  ml-30 border border-gray-500 rounded-full px-10 py-1 text-gray-800 hover:bg-gray-100 transition-all"
-    >
-      Login
-    </button>
-  )
-}
+          )
+        }
 
 
         {/* Mobile Menu Button */}
@@ -117,7 +155,7 @@ const Navbar =()=> {
             <li className="py-2 w-full text-center hover:text-blue-600 transition-all">
               <a href="/about">About</a>
             </li>
-            
+
             {/* Services Dropdown */}
             <li className="py-2 w-full text-center">
               <button
@@ -142,40 +180,40 @@ const Navbar =()=> {
               <a href="/contact">Contact</a>
             </li>
             <li>
-            {
-  isLoggedIn ? (
-    <div className="relative">
-      {/* Profile Icon */}
-      <User
-        className="text-gray-800 cursor-pointer"
-        size={24}
-        onClick={() => setShowProfilePopup(!showProfilePopup)}
-      />
+              {
+                isLoggedIn ? (
+                  <div className="relative">
+                    {/* Profile Icon */}
+                    <User
+                      className="text-gray-800 cursor-pointer"
+                      size={24}
+                      onClick={() => setShowProfilePopup(!showProfilePopup)}
+                    />
 
-      {/* Popup */}
-      {showProfilePopup && (
-        <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50">
-          <p className="text-lg font-semibold">{userData.name}</p>
-          <p className="text-sm text-gray-600">{userData.email}</p>
-          {userData.isVerified ? (
-            <p className="text-green-600 font-medium mt-2">Verified ✅</p>
-          ) : (
-            <button className="mt-2 text-blue-600 font-medium hover:underline">
-              Verify Email
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  ) : (
-    <button
-      onClick={() => navigate('/login')}
-      className="mt-4 border border-gray-500 rounded-full px-6 py-2 text-gray-800 hover:bg-gray-100 transition-all"
-    >
-      Login
-    </button>
-  )
-}
+                    {/* Popup */}
+                    {showProfilePopup && (
+                      <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50">
+                        <p className="text-lg font-semibold">{userData.name}</p>
+                        <p className="text-sm text-gray-600">{userData.email}</p>
+                        {userData.isVerified ? (
+                          <p className="text-green-600 font-medium mt-2">Verified ✅</p>
+                        ) : (
+                          <button className="mt-2 text-blue-600 font-medium hover:underline">
+                            Verify Email
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="mt-4 border border-gray-500 rounded-full px-6 py-2 text-gray-800 hover:bg-gray-100 transition-all"
+                  >
+                    Login
+                  </button>
+                )
+              }
 
             </li>
           </ul>

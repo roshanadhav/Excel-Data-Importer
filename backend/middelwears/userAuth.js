@@ -17,7 +17,7 @@ import jwt from 'jsonwebtoken'
         }
         next() ; 
     } catch (error) {
-        return res.json({success  : true , message : false })
+        return res.json({success  : false , message : error.message })
     }
 }
 
