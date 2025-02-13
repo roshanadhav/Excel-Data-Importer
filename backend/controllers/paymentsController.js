@@ -36,27 +36,32 @@ export const createOrder = async (req , res)=>{
 
 export const verifyPayment = async (req , res)=>{
     const {order_id , payment_id , signature , userId , subscreption_id} = req.body  ; 
-
+    console.log(req.body)
+    if (!order_id || !payment_id || !signature || !userId || !subscreption_id) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+    }
 
     const secreateKey = process.env.REZORPAY_SECREAT ; 
 
     // creating hmac object ->
 
     const hmac = crypto.createHmac("sha256" , secreateKey) ; 
-    hmac.update(order_id + '|' + payment_id) ; 
-
+    hmac.update(`${order_id.trim()}|${payment_id.trim()}`) ; 
     const genrateSignature = hmac.digest("hex") ; 
 
 
-    if (genrateSignature === signature ) {
+    if (genrateSignature === signature.trim() ) {
         // db operations  
         const user = await User.findById(userId) ; 
-        user.subscreption = subscreption_id ; 
+        if (!user ) {
+            return res.json({success : false , message : 'User Not Found'})
+        }
+        user.sub = subscreption_id ; 
         await user.save() ; 
         return res.json({success : true , message : 'Payment Verified'})
     }
     else{
-        return res.json({success : true , message : 'Payment Not Verified '})
+        return res.json({success : false , message : 'Payment Not Verified '})
     }
 
 

@@ -50,12 +50,11 @@ const SubscriptionCard = () => {
 
                     const options2 ={
                         order_id : response.razorpay_order_id , 
-                        payment_id : response.payment_id , 
-                        signature : response.signature ,
+                        payment_id : response.razorpay_payment_id , 
+                        signature: response.razorpay_signature,
                     }
-                     axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/payment/verifyPayment` , options2)
+                     axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/payment/verifyPayment` , {subscreption_id : subscriptionId , ...options2} , {withCredentials: true} )
                      .then(res=>{
-                        console.log(res)
                         if (res?.data?.success) {
                             toast.success('Payment Sucessfull')
                         }
@@ -67,19 +66,14 @@ const SubscriptionCard = () => {
                     
                 } 
             });
-
             paymentObject.open();
             
         } catch (error) {
             console.error("Error creating order:", error);
         }
-
-        
-
     };
 
     if (loading) return <p className="text-center text-lg font-semibold">Loading subscriptions...</p>;
-
     return (
         <div className="p-6 mt-50 h-full grid grid-cols-1 md:grid-cols-3 mb-40 gap-6">
             {subscriptions.map((sub) => (
