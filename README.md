@@ -6,7 +6,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-99.4%25-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-[🐛 **Live Link**](https://github.com/roshanadhav/Excel-Data-Importer/issues](https://excel-data-importer-git-main-roshanadhavs-projects.vercel.app/)) • [💡 **Request Feature**](https://github.com/roshanadhav/Excel-Data-Importer/discussions)
+[🐛 **Live Link**](https://excel-data-importer-git-main-roshanadhavs-projects.vercel.app/)) • [💡 **Request Feature**](https://github.com/roshanadhav/Excel-Data-Importer/discussions)
 
 </div>
 
